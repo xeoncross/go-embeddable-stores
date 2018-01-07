@@ -17,7 +17,7 @@ func newBolt(path string) (kvEngine, error) {
 		return nil, err
 	}
 	db.NoSync = true
-	err = db.Update(func(tx *bolt.Tx) error {
+	db.Update(func(tx *bolt.Tx) error {
 		_, err := tx.CreateBucket(boltBucketName)
 		return err
 	})
