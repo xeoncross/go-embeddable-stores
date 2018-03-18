@@ -40,13 +40,13 @@ func shuffle(a [][]byte) {
 
 func generateKeys(count int, minL int, maxL int) [][]byte {
 	keys := make([][]byte, 0, count)
-	seen := make(map[string]bool, count)
+	seen := make(map[string]struct{}, count)
 	for len(keys) < count {
 		k := randKey(minL, maxL)
 		if _, ok := seen[k]; ok {
 			continue
 		}
-		seen[k] = true
+		seen[k] = struct{}{}
 		keys = append(keys, []byte(k))
 	}
 	return keys
