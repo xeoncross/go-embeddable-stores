@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"os"
 	"path"
 	"runtime"
 	"sync"
@@ -170,5 +171,11 @@ func benchmark(engine string, dir string, numKeys int, minKS int, maxKS int, min
 	if pdb, ok := db.(*pogreb.DB); ok {
 		printStats(pdb)
 	}
-	return db.Close()
+
+	err = db.Close()
+	if err != nil {
+		return err
+	}
+
+	return os.RemoveAll(dbpath)
 }

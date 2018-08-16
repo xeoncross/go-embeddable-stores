@@ -1,20 +1,23 @@
 package main
 
 import (
+	_ "expvar"
 	"flag"
 	"fmt"
+	"net/http"
 	"os"
+	"time"
 )
 
 var (
 	engine       = flag.String("e", "pogreb", "database engine name. pogreb, goleveldb, bolt or badgerdb")
-	numKeys      = flag.Int("n", 100000, "number of keys")
-	minKeySize   = flag.Int("mink", 16, "minimum key size")
+	numKeys      = flag.Int("n", 300000, "number of keys")
+	minKeySize   = flag.Int("mink", 32, "minimum key size")
 	maxKeySize   = flag.Int("maxk", 64, "maximum key size")
 	minValueSize = flag.Int("minv", 128, "minimum value size")
-	maxValueSize = flag.Int("maxv", 512, "maximum value size")
-	concurrency  = flag.Int("c", 1, "number of concurrent goroutines")
-	dir          = flag.String("d", "", "database directory")
+	maxValueSize = flag.Int("maxv", 1024, "maximum value size")
+	concurrency  = flag.Int("c", 3, "number of concurrent goroutines")
+	dir          = flag.String("d", "data", "database directory")
 	progress     = flag.Bool("p", false, "show progress")
 )
 
@@ -25,7 +28,17 @@ func main() {
 		flag.Usage()
 		return
 	}
-	if err := benchmark(*engine, *dir, *numKeys, *minKeySize, *maxKeySize, *minValueSize, *maxValueSize, *concurrency, *progress); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+
+	// Setup monitoring
+	go http.ListenAndServe(":1234", http.DefaultServeMux)
+	time.Sleep(time.Second)
+
+	for _, engine := range []string{"pogreb", "goleveldb", "bolt", "badgerdb"} {
+		fmt.Printf("Running %s\n", engine)
+		if err := benchmark(engine, *dir, *numKeys, *minKeySize, *maxKeySize, *minValueSize, *maxValueSize, *concurrency, *progress); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+		time.Sleep(time.Second * 2)
+		fmt.Println()
 	}
 }
