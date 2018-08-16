@@ -33,12 +33,18 @@ func main() {
 	go http.ListenAndServe(":1234", http.DefaultServeMux)
 	time.Sleep(time.Second)
 
-	for _, engine := range []string{"pogreb", "goleveldb", "bolt", "badgerdb"} {
-		fmt.Printf("Running %s\n", engine)
+	fmt.Printf("Number of keys: %d\n", *numKeys)
+	fmt.Printf("Minimum key size: %d, maximum key size: %d\n", *minKeySize, *maxKeySize)
+	fmt.Printf("Minimum value size: %d, maximum value size: %d\n", *minValueSize, *maxValueSize)
+	fmt.Printf("Concurrency: %d\n", *concurrency)
+	fmt.Println()
+
+	for _, engine := range []string{"badgerdb", "goleveldb", "pogreb", "bolt"} {
 		if err := benchmark(engine, *dir, *numKeys, *minKeySize, *maxKeySize, *minValueSize, *maxValueSize, *concurrency, *progress); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}
-		time.Sleep(time.Second * 2)
+
 		fmt.Println()
+		time.Sleep(time.Second * 3)
 	}
 }

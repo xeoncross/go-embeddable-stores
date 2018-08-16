@@ -95,10 +95,10 @@ func benchmark(engine string, dir string, numKeys int, minKS int, maxKS int, min
 		return err
 	}
 
-	fmt.Printf("Number of keys: %d\n", numKeys)
-	fmt.Printf("Minimum key size: %d, maximum key size: %d\n", minKS, maxKS)
-	fmt.Printf("Minimum value size: %d, maximum value size: %d\n", minVS, maxVS)
-	fmt.Printf("Concurrency: %d\n", concurrency)
+	// fmt.Printf("Number of keys: %d\n", numKeys)
+	// fmt.Printf("Minimum key size: %d, maximum key size: %d\n", minKS, maxKS)
+	// fmt.Printf("Minimum value size: %d, maximum value size: %d\n", minVS, maxVS)
+	// fmt.Printf("Concurrency: %d\n", concurrency)
 	fmt.Printf("Running %s benchmark...\n", engine)
 
 	keys := generateKeys(numKeys, minKS, maxKS)
@@ -177,5 +177,6 @@ func benchmark(engine string, dir string, numKeys int, minKS int, maxKS int, min
 		return err
 	}
 
+	// forceGC()
 	return os.RemoveAll(dbpath)
 }
