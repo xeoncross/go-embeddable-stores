@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/dgraph-io/badger"
 )
 
@@ -47,4 +49,8 @@ func (db *badgerdbEngine) Close() error {
 
 func (db *badgerdbEngine) FileSize() (int64, error) {
 	return dirSize(db.path)
+}
+
+func (db *badgerdbEngine) Cleanup() error {
+	return os.RemoveAll(db.path)
 }

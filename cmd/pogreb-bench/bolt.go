@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/boltdb/bolt"
 )
 
@@ -9,6 +11,7 @@ var boltBucketName = []byte("benchmark")
 type boltEngine struct {
 	db   *bolt.DB
 	path string
+	// bucket *bolt.Bucket
 }
 
 func newBolt(path string) (kvEngine, error) {
@@ -17,10 +20,12 @@ func newBolt(path string) (kvEngine, error) {
 		return nil, err
 	}
 	db.NoSync = true
-	db.Update(func(tx *bolt.Tx) error {
-		_, err := tx.CreateBucket(boltBucketName)
-		return err
-	})
+
+	// var bucket *bolt.Bucket
+	// err = db.Update(func(tx *bolt.Tx) (err error) {
+	// 	bucket, err = tx.CreateBucket(boltBucketName)
+	// 	return err
+	// })
 	return &boltEngine{db: db, path: path}, err
 }
 
@@ -29,6 +34,7 @@ func (db *boltEngine) Put(key []byte, value []byte) error {
 		b := tx.Bucket(boltBucketName)
 		return b.Put(key, value)
 	})
+	// return db.bucket.Put(key, value)
 }
 
 func (db *boltEngine) Get(key []byte) ([]byte, error) {
@@ -39,6 +45,7 @@ func (db *boltEngine) Get(key []byte) ([]byte, error) {
 		return nil
 	})
 	return val, err
+	// return db.bucket.Get(key), nil
 }
 
 func (db *boltEngine) Close() error {
@@ -47,4 +54,8 @@ func (db *boltEngine) Close() error {
 
 func (db *boltEngine) FileSize() (int64, error) {
 	return dirSize(db.path)
+}
+
+func (db *boltEngine) Cleanup() error {
+	return os.RemoveAll(db.path)
 }

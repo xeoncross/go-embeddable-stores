@@ -11,6 +11,7 @@ type kvEngine interface {
 	Get(key []byte) ([]byte, error)
 	Close() error
 	FileSize() (int64, error)
+	Cleanup() error
 }
 
 type engineCtr func(string) (kvEngine, error)
@@ -20,6 +21,7 @@ var engines = map[string]engineCtr{
 	"goleveldb": newGolevelDB,
 	"bolt":      newBolt,
 	"badgerdb":  newBadgerdb,
+	"tiedot":    newTiedot,
 }
 
 func getEngineCtr(name string) (engineCtr, error) {

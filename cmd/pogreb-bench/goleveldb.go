@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/opt"
 	"github.com/syndtr/goleveldb/leveldb/util"
@@ -35,4 +37,8 @@ func (db *goleveldbEngine) Close() error {
 
 func (db *goleveldbEngine) FileSize() (int64, error) {
 	return dirSize(db.path)
+}
+
+func (db *goleveldbEngine) Cleanup() error {
+	return os.RemoveAll(db.path)
 }

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"os"
 	"path"
 	"runtime"
 	"sync"
@@ -64,6 +63,7 @@ func concurrentBatch(keys [][]byte, concurrency int, cb func(gid int, batch [][]
 		if batchEnd > len(keys) {
 			batchEnd = len(keys)
 		}
+		// FIX panic: runtime error: slice bounds out of range
 		go func(gid int, batch [][]byte) {
 			err = cb(gid, batch)
 			wg.Done()
@@ -130,9 +130,9 @@ func benchmark(engine string, dir string, numKeys int, minKS int, maxKS int, min
 	endsecs := time.Since(start).Seconds()
 	totalalsecs := endsecs
 	fmt.Printf("Put: %.3f sec, %d ops/sec\n", endsecs, int(float64(numKeys)/endsecs))
-	if pdb, ok := db.(*pogreb.DB); ok {
-		printStats(pdb)
-	}
+	// if pdb, ok := db.(*pogreb.DB); ok {
+	// 	printStats(pdb)
+	// }
 	shuffle(keys)
 	db, err = ctr(dbpath)
 	if err != nil {
@@ -168,15 +168,14 @@ func benchmark(engine string, dir string, numKeys int, minKS int, maxKS int, min
 		return err
 	}
 	fmt.Printf("File size: %s\n", byteSize(sz))
-	if pdb, ok := db.(*pogreb.DB); ok {
-		printStats(pdb)
-	}
+	// if pdb, ok := db.(*pogreb.DB); ok {
+	// 	printStats(pdb)
+	// }
 
 	err = db.Close()
 	if err != nil {
 		return err
 	}
 
-	// forceGC()
-	return os.RemoveAll(dbpath)
+	return db.Cleanup()
 }
