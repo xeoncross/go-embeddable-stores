@@ -1,9 +1,18 @@
-pogreb-bench
+Go Embeddable Store
 ============
 
-pogreb-bench is a benchmarking tool for databases that can be compiled with Go into a single binary. These databases are called "in-process" or "embedded".
+Go is a compiled language with a number of high-performance data stores  that can be compiled with Go into a single binary. These databases are called "in-process" or "embedded".
 
-These benchmarks are off for a variety of reasons including differing levels of durability/sync and feature-scope. I recommend people default to goleveldb for a general store. 
+By default, most apps slap MongoDB or MySQL/MariaDB into an application for storing state. Since we left the .net/node/php/ruby/python world we can have our database bundled right into our application. For smaller projects which do not need a globally distributed / sharded database this is a great devops win.
+
+Embedded databases are not for you if:
+
+- building a serverless app (AWS lambda / Zeit Now)
+- dealing with >1 Million TCP requests a day
+- have highly concurrent request patterns
+
+
+These benchmarks are off for a variety of reasons including differing levels of durability/sync and feature-scope. I recommend people default to goleveldb for a general store.
 
 # Embeddable Go Databases
 
@@ -91,3 +100,8 @@ Comparison between [bvinc/go-sqlite-lite & crawshaw/sqlite](https://www.reddit.c
 - [badgerdb, goleveldb, boltdb benchmark](https://github.com/zchee/go-benchmarks/blob/master/db/db_bench_test.go) by zchee.
 - [badgerdb, goleveldb, boltdb, rocksdb benchmark](https://github.com/dgraph-io/badger-bench) by dgraph. (High-Quality)
 - [goleveldb, boltdb, pogreb write/put benchmark](https://gist.github.com/mattn/3990033f7bc8a57cd5b86edefb254332) by mattn.
+
+# Guides
+
+- [Expiring boltdb items](http://178.62.97.106/expiring-boltdb-items/)
+- [range and prefix scans in boltdb](https://bl.ocks.org/joyrexus/22c3ef0984ed957f54b9)

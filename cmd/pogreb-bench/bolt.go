@@ -48,6 +48,20 @@ func (db *boltEngine) Get(key []byte) ([]byte, error) {
 	// return db.bucket.Get(key), nil
 }
 
+// https://github.com/boltdb/bolt#prefix-scans
+// func (db *boltEngine) Search(key []byte) error {
+// 	return db.db.View(func(tx *bolt.Tx) error {
+// 		c := tx.Bucket(key).Cursor()
+//
+// 		suffix := []byte("1234")
+// 		for k, v := c.Seek(suffix); bytes.HasSuffix(k, suffix); k, v = c.Next() {
+// 			fmt.Printf("key=%s, value=%s\n", k, v)
+// 		}
+//
+// 		return nil
+// 	})
+// }
+
 func (db *boltEngine) Close() error {
 	return db.db.Close()
 }
