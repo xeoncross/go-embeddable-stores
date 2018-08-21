@@ -40,7 +40,7 @@ Tiedot is a document store, it really can't be compared to these other databases
 
 ### bbolt - https://github.com/coreos/bbolt
 
-Not tested.
+Not tested. Has [BoltHold](https://github.com/timshannon/bolthold/).
 
 
 ### SQLite
@@ -105,3 +105,5 @@ Comparison between [bvinc/go-sqlite-lite & crawshaw/sqlite](https://www.reddit.c
 
 - [Expiring boltdb items](http://178.62.97.106/expiring-boltdb-items/)
 - [range and prefix scans in boltdb](https://bl.ocks.org/joyrexus/22c3ef0984ed957f54b9)
+- [map callbacks to range/prefix scans in Boltdb](https://github.com/joyrexus/buckets/blob/master/rangescan.go)
+- [building hash, set, and list using Boltdb](https://github.com/xyproto/simplebolt/blob/master/simplebolt.go)
