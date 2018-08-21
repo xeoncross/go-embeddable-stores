@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"math/rand"
 	"testing"
 )
@@ -67,6 +68,86 @@ func BenchmarkGob(b *testing.B) {
 			b.Error("mis-match")
 		}
 	}
+}
+
+// Slower because of a lack of search
+func BenchmarkByteIndex(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		bi := &ByteIndex{}
+		var ids [][]byte
+		for i := 0; i < 100000; i++ {
+			id := make([]byte, 8)
+			rand.Read(id)
+			bi.Add(id)
+			bi.Find(id)
+			ids = append(ids, id)
+		}
+
+		for _, id := range ids {
+			bi.Remove(id)
+		}
+	}
+}
+
+func BenchmarkKeyList(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		kl := &keyList{}
+		var ids [][]byte
+		for i := 0; i < 100000; i++ {
+
+			id := make([]byte, 8)
+			rand.Read(id)
+			kl.add(id)
+			kl.in(id)
+			ids = append(ids, id)
+		}
+
+		for _, id := range ids {
+			kl.remove(id)
+		}
+	}
+}
+
+func TestByteIndex(t *testing.T) {
+	bi := &ByteIndex{}
+
+	id := make([]byte, 8)
+	rand.Read(id)
+	bi.Add(id)
+
+	id2 := make([]byte, 8)
+	rand.Read(id2)
+	bi.Add(id2)
+
+	id3 := make([]byte, 8)
+	rand.Read(id3)
+	bi.Add(id3)
+
+	// fmt.Println("id", id)
+	// fmt.Println("id2", id2)
+	// fmt.Println("id3", id3)
+	// fmt.Println("ByteIndex", bi)
+
+	if !bytes.Equal((*bi)[0:8], id) {
+		t.Error("ID not saved")
+	}
+
+	i := bi.Find(id)
+	if i == -1 {
+		t.Error("ID not found")
+	}
+
+	if i != 0 {
+		t.Errorf("ID not in correct location: %d", i)
+	}
+
+	bi.Remove(id)
+	// fmt.Println("ByteIndex", bi)
+
+	if !bytes.Equal((*bi)[8:16], id3) {
+		t.Error("ID not removed")
+	}
+
 }
 
 func testEq(a, b []uint64) bool {

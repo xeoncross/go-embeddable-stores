@@ -70,3 +70,55 @@ func UnmarshalGob(data []byte) (ids []uint64, err error) {
 	err = gob.NewDecoder(b).Decode(&ids)
 	return
 }
+
+// This is slower than keylist because the bytes are not ordered so we have
+// to search the whole thing
+// ByteIndex is an index where every 64bits/8bytes is an object's ID
+type ByteIndex []byte
+
+// Add a 64bit integer (in byte form) to the index
+func (b *ByteIndex) Add(id []byte) {
+	// Make sure this ID isn't already here
+	for i := 0; i < len((*b)); i += 8 {
+		if bytes.Equal(id, (*b)[i:i+8]) {
+			return
+		}
+	}
+
+	(*b) = append((*b), id...)
+}
+
+// Remove a 64bit integer (in []byte form) from the index
+func (b *ByteIndex) Remove(id []byte) {
+	for i := 0; i < len((*b)); i += 8 {
+		if bytes.Equal(id, (*b)[i:i+8]) {
+			(*b) = append((*b)[:i], (*b)[i+8:]...)
+		}
+	}
+}
+
+func (b *ByteIndex) Find(id []byte) (i int) {
+	for i = 0; i < len((*b)); i += 8 {
+		if bytes.Equal(id, (*b)[i:i+8]) {
+			return
+		}
+	}
+	return -1
+}
+
+// func MarshalByte(v []uint64) (index []byte, err error) {
+// 	for _, id := range v {
+// 		b := make([]byte, 8)
+// 		binary.BigEndian.PutUint64(b, id)
+// 		index = append(index, b...)
+// 	}
+// 	return
+// }
+//
+// func UnmarshalByte(index []byte) (ids []uint64, err error) {
+// 	for i := 0; i < len(index); i += 8 {
+// 		id := binary.BigEndian.Uint64(index[i : i+8])
+// 		ids = append(ids, id)
+// 	}
+// 	return
+// }
