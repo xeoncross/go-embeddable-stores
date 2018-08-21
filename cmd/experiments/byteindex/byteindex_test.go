@@ -71,42 +71,143 @@ func BenchmarkGob(b *testing.B) {
 }
 
 // Slower because of a lack of search
-func BenchmarkByteIndex(b *testing.B) {
-	for n := 0; n < b.N; n++ {
-		bi := &ByteIndex{}
-		var ids [][]byte
-		for i := 0; i < 100000; i++ {
-			id := make([]byte, 8)
-			rand.Read(id)
-			bi.Add(id)
-			bi.Find(id)
-			ids = append(ids, id)
-		}
+// func BenchmarkByteIndexAdd(b *testing.B) {
+// 	for n := 0; n < b.N; n++ {
+// 		bi := &ByteIndex{}
+// 		for i := 0; i < 100000; i++ {
+// 			id := make([]byte, 8)
+// 			rand.Read(id)
+// 			bi.Add(id)
+// 		}
+// 	}
+// }
 
-		for _, id := range ids {
-			bi.Remove(id)
-		}
+// func BenchmarkByteIndexRemove(b *testing.B) {
+// 	for n := 0; n < b.N; n++ {
+// 		bi := &ByteIndex{}
+// 		var ids [][]byte
+// 		for i := 0; i < 100000; i++ {
+// 			id := make([]byte, 8)
+// 			rand.Read(id)
+// 			bi.Add(id)
+// 			bi.Find(id)
+// 			ids = append(ids, id)
+// 		}
+//
+// 		for _, id := range ids {
+// 			bi.Remove(id)
+// 		}
+// 	}
+// }
+
+// func BenchmarkKeyListAdd(b *testing.B) {
+// 	for n := 0; n < b.N; n++ {
+// 		kl := &keyList{}
+// 		for i := 0; i < 100000; i++ {
+// 			id := make([]byte, 8)
+// 			rand.Read(id)
+// 			kl.add(id)
+// 		}
+// 	}
+// }
+
+// func BenchmarkKeyListRemove(b *testing.B) {
+// 	for n := 0; n < b.N; n++ {
+// 		kl := &keyList{}
+// 		var ids [][]byte
+// 		for i := 0; i < 100000; i++ {
+//
+// 			id := make([]byte, 8)
+// 			rand.Read(id)
+// 			kl.add(id)
+// 			kl.in(id)
+// 			ids = append(ids, id)
+// 		}
+//
+// 		for _, id := range ids {
+// 			kl.remove(id)
+// 		}
+// 	}
+// }
+
+func BenchmarkKeyListMarshalByte(b *testing.B) {
+
+	kl := &keyList{}
+	for i := 0; i < 100000; i++ {
+		id := make([]byte, 8)
+		rand.Read(id)
+		kl.add(id)
 	}
+
+	b.ResetTimer()
+
+	b.Run("Byte", func(b *testing.B) {
+		for n := 0; n < b.N; n++ {
+			data, err := kl.MarshalToByte()
+			if err != nil {
+				b.Error(err)
+			}
+
+			kl = &keyList{}
+			err = kl.UnmarshalFromByte(data)
+			if err != nil {
+				b.Error(err)
+			}
+
+			if len(*kl) != 100000 {
+				b.Error("Error decoding")
+			}
+		}
+	})
+
+	b.Run("Gob", func(b *testing.B) {
+		for n := 0; n < b.N; n++ {
+			data, err := kl.MarshalToGob()
+			if err != nil {
+				b.Error(err)
+			}
+
+			kl = &keyList{}
+			err = kl.UnmarshalFromGob(data)
+			if err != nil {
+				b.Error(err)
+			}
+
+			if len(*kl) != 100000 {
+				b.Error("Error decoding")
+			}
+		}
+	})
 }
 
-func BenchmarkKeyList(b *testing.B) {
-	for n := 0; n < b.N; n++ {
-		kl := &keyList{}
-		var ids [][]byte
-		for i := 0; i < 100000; i++ {
-
-			id := make([]byte, 8)
-			rand.Read(id)
-			kl.add(id)
-			kl.in(id)
-			ids = append(ids, id)
-		}
-
-		for _, id := range ids {
-			kl.remove(id)
-		}
-	}
-}
+// func BenchmarkKeyListMarshalGob(b *testing.B) {
+//
+// 	kl := &keyList{}
+// 	for i := 0; i < 100000; i++ {
+// 		id := make([]byte, 8)
+// 		rand.Read(id)
+// 		kl.add(id)
+// 	}
+//
+// 	b.ResetTimer()
+//
+// 	for n := 0; n < b.N; n++ {
+// 		data, err := kl.MarshalToGob()
+// 		if err != nil {
+// 			b.Error(err)
+// 		}
+//
+// 		kl = &keyList{}
+// 		err = kl.UnmarshalFromGob(data)
+// 		if err != nil {
+// 			b.Error(err)
+// 		}
+//
+// 		if len(*kl) != 100000 {
+// 			b.Error("Error decoding")
+// 		}
+// 	}
+// }
 
 func TestByteIndex(t *testing.T) {
 	bi := &ByteIndex{}
