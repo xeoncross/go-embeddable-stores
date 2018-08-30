@@ -22,7 +22,7 @@ func newBBolt(path string) (kvEngine, error) {
 	// db.NoSync = false // default to sync for each write
 
 	err = db.Update(func(tx *bbolt.Tx) (err error) {
-		_, err = tx.CreateBucket(bboltBucketName)
+		_, err = tx.CreateBucketIfNotExists(bboltBucketName)
 		return err
 	})
 	return &bboltEngine{db: db, path: path}, err

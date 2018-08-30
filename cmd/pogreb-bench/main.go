@@ -39,7 +39,7 @@ func main() {
 	fmt.Printf("Concurrency: %d\n", *concurrency)
 	fmt.Println()
 
-	for _, engine := range []string{"tiedot", "badgerdb", "goleveldb", "pogreb", "bolt"} {
+	for engine := range engines {
 		if err := benchmark(engine, *dir, *numKeys, *minKeySize, *maxKeySize, *minValueSize, *maxValueSize, *concurrency, *progress); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}
