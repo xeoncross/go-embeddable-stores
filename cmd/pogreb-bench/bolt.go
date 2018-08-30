@@ -19,13 +19,12 @@ func newBolt(path string) (kvEngine, error) {
 	if err != nil {
 		return nil, err
 	}
-	db.NoSync = true
+	db.NoSync = false
 
-	// var bucket *bolt.Bucket
-	// err = db.Update(func(tx *bolt.Tx) (err error) {
-	// 	bucket, err = tx.CreateBucket(boltBucketName)
-	// 	return err
-	// })
+	err = db.Update(func(tx *bolt.Tx) (err error) {
+		_, err = tx.CreateBucket(boltBucketName)
+		return err
+	})
 	return &boltEngine{db: db, path: path}, err
 }
 
@@ -71,5 +70,5 @@ func (db *boltEngine) FileSize() (int64, error) {
 }
 
 func (db *boltEngine) Cleanup() error {
-	return os.RemoveAll(db.path)
+	return os.Remove(db.path)
 }

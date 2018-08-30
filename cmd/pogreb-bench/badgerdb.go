@@ -8,7 +8,7 @@ import (
 
 func newBadgerdb(path string) (kvEngine, error) {
 	opts := badger.DefaultOptions
-	opts.SyncWrites = false
+	opts.SyncWrites = true
 	opts.Dir = path
 	opts.ValueDir = path
 	db, err := badger.Open(opts)

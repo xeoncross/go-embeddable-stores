@@ -20,8 +20,9 @@ var engines = map[string]engineCtr{
 	"pogreb":    newPogreb,
 	"goleveldb": newGolevelDB,
 	"bolt":      newBolt,
-	"badgerdb":  newBadgerdb,
-	"tiedot":    newTiedot,
+	"bbolt":     newBBolt,
+	// "badgerdb": newBadgerdb,
+	"tiedot": newTiedot,
 }
 
 func getEngineCtr(name string) (engineCtr, error) {

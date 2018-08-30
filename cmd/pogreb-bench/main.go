@@ -11,7 +11,7 @@ import (
 
 var (
 	engine       = flag.String("e", "pogreb", "database engine name. pogreb, goleveldb, bolt or badgerdb")
-	numKeys      = flag.Int("n", 500000, "number of keys")
+	numKeys      = flag.Int("n", 5000, "number of keys")
 	minKeySize   = flag.Int("mink", 32, "minimum key size")
 	maxKeySize   = flag.Int("maxk", 64, "maximum key size")
 	minValueSize = flag.Int("minv", 128, "minimum value size")

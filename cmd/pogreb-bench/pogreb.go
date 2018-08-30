@@ -2,13 +2,16 @@ package main
 
 import (
 	"os"
+	"time"
 
 	"github.com/akrylysov/pogreb"
 	"github.com/akrylysov/pogreb/fs"
 )
 
 func newPogreb(path string) (kvEngine, error) {
-	db, err := pogreb.Open(path, &pogreb.Options{FileSystem: fs.OS})
+	opt := &pogreb.Options{FileSystem: fs.OS}
+	opt.BackgroundSyncInterval = time.Second
+	db, err := pogreb.Open(path, opt)
 	return &pogrebEngine{db, path}, err
 }
 
