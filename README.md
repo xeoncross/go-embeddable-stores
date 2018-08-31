@@ -3,16 +3,15 @@ Go Embeddable Store
 
 Go is a compiled language with a number of high-performance data stores  that can be compiled with Go into a single binary. These databases are called "in-process" or "embedded".
 
-By default, most apps slap MongoDB or MySQL/MariaDB into an application for storing state. Since we left the .net/node/php/ruby/python world we can have our database bundled right into our application. For smaller projects which do not need a globally distributed / sharded database this is a great devops win.
+By default, most apps slap MongoDB or MySQL/MariaDB into an application for storing state. Since we left the `.net/node/php/ruby/python` world we can have our database bundled right into our application. For smaller projects, which do not need a globally distributed / sharded database, this is a great devops win.
 
-Embedded databases are not for you if:
+Embedded databases are propbably not for you if:
 
 - building a serverless app (AWS lambda / Zeit Now)
-- dealing with >1 Million TCP requests a day
+- dealing with >1 Million HTTP requests a day
 - have highly concurrent request patterns
 
-
-These benchmarks are off for a variety of reasons including differing levels of durability/sync and feature-scope. I recommend people default to goleveldb for a general store.
+These benchmarks and tests are off for a variety of reasons including differing levels of durability/sync and feature-scope. I recommend people default to `bbolt` for a general store.
 
 # Embeddable Go Databases
 
@@ -20,28 +19,33 @@ These benchmarks are off for a variety of reasons including differing levels of 
 
 Solid, well-tested, development is locked. Each transaction has a consistent view of the data as it existed when the transaction started. Slowest of the bunch. Has [Storm ORM](https://github.com/asdine/storm). Largest file size. Slowest (due to consistent-data views).
 
+### bbolt - https://github.com/etcd-io/bbolt
+
+Fork of boltdb to add new features.
+
+- [BoltHold](https://github.com/timshannon/bolthold/) - simple querying and indexing layer
+- [Storm](https://github.com/asdine/storm/) - query-builder, indexes, and struct storage
+- [Buckets](https://github.com/joyrexus/buckets) - simple access layer
+
 ### pogreb - https://github.com/akrylysov/pogreb
 
 Optimized store for random lookups. *No support for range/prefix scans*. Slow in this benchmark. [More...](https://artem.krylysov.com/blog/2018/03/24/pogreb-key-value-store/)
 
 ### goleveldb - https://github.com/syndtr/goleveldb
 
-Well tested. A redis-like list/hash abstraction ([ledisdb](http://ledisdb.com/)) built with it for more complex usage. Smallest storage size.
+Well tested. Smallest storage size.
+
+- [ledisdb](http://ledisdb.com/) - redis-like abstraction over it
 
 ### badgerdb - https://github.com/dgraph-io/badger
 
 Fastest engine for random lookups and inserts. Graph engine [dgraph](https://github.com/dgraph-io/dgraph) built upon it. [More...](https://blog.dgraph.io/post/badger/)
 
+# More Complex Engines
+
 ### tiedot - https://github.com/HouzuoGuo/tiedot/
 
 Tiedot is a document store, it really can't be compared to these other databases correctly. Included only for loose reference. Super-fast write speeds. Huge storage requirements.
-
-# TODO
-
-### bbolt - https://github.com/coreos/bbolt
-
-Not tested. Has [BoltHold](https://github.com/timshannon/bolthold/).
-
 
 ### SQLite
 
@@ -66,34 +70,41 @@ Comparison between [bvinc/go-sqlite-lite & crawshaw/sqlite](https://www.reddit.c
 
 # Sample Results
 
-    Number of keys: 500000
+    Number of keys: 5000
     Minimum key size: 32, maximum key size: 64
     Minimum value size: 128, maximum value size: 1024
     Concurrency: 3
 
     Running tiedot benchmark...
-    Put: 7.935 sec, 63012 ops/sec
-    Get: 0.116 sec, 4298637 ops/sec
-    Put + Get time: 8.051 sec
-    File size: 1.25GB
-
-    Running badgerdb benchmark...
-    Put: 9.713 sec, 51477 ops/sec
-    Get: 1.436 sec, 348216 ops/sec
-    Put + Get time: 11.149 sec
-    File size: 373MB
-
-    Running goleveldb benchmark...
-    Put: 22.387 sec, 22334 ops/sec
-    Get: 2.158 sec, 231742 ops/sec
-    Put + Get time: 24.545 sec
-    File size: 306MB
+    Put: 0.022 sec, 226300 ops/sec
+    Get: 0.001 sec, 3552460 ops/sec
+    Put + Get time: 0.024 sec
+    File size: 512.00MB
 
     Running pogreb benchmark...
-    Put: 58.528 sec, 8542 ops/sec
-    Get: 0.224 sec, 2234631 ops/sec
-    Put + Get time: 58.751 sec
-    File size: 424MB
+    Put: 0.142 sec, 35293 ops/sec
+    Get: 0.002 sec, 2489791 ops/sec
+    Put + Get time: 0.144 sec
+    File size: 4.25MB
+
+    Running goleveldb benchmark...
+    Put: 0.035 sec, 144902 ops/sec
+    Get: 0.009 sec, 568586 ops/sec
+    Put + Get time: 0.043 sec
+    File size: 3.05MB
+
+    Running bolt benchmark...
+    Put: 15.868 sec, 315 ops/sec
+    Get: 0.004 sec, 1136989 ops/sec
+    Put + Get time: 15.873 sec
+    File size: 8.00MB
+
+    Running bbolt benchmark...
+    Put: 14.710 sec, 339 ops/sec
+    Get: 0.006 sec, 874240 ops/sec
+    Put + Get time: 14.716 sec
+    File size: 8.00MB
+
 
 # Other benchmarks
 
