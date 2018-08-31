@@ -41,6 +41,10 @@ Well tested. Smallest storage size.
 
 Fastest engine for random lookups and inserts. Graph engine [dgraph](https://github.com/dgraph-io/dgraph) built upon it. [More...](https://blog.dgraph.io/post/badger/)
 
+### keydb - https://github.com/robaho/keydb
+
+Not tested.
+
 # More Complex Engines
 
 ### tiedot - https://github.com/HouzuoGuo/tiedot/
