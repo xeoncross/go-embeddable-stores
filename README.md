@@ -110,6 +110,21 @@ Comparison between [bvinc/go-sqlite-lite & crawshaw/sqlite](https://www.reddit.c
     File size: 8.00MB
 
 
+## Articles
+
+- https://www.voltdb.com/blog/2015/04/01/foundationdbs-lesson-fast-key-value-store-not-enough/
+- https://petewarden.com/2010/10/01/how-i-ended-up-using-s3-as-my-database/
+- https://hackernoon.com/what-i-learnt-from-building-3-high-traffic-web-applications-on-an-embedded-key-value-store-68d47249774f
+
+## Indexing data
+
+- https://github.com/blevesearch/bleve
+- http://roaringbitmap.org/
+- https://www.pilosa.com/docs/latest/data-model/
+- https://github.com/Xeoncross/keyset
+
+
+
 # Other benchmarks
 
 - [badgerdb, goleveldb, boltdb benchmark](https://github.com/zchee/go-benchmarks/blob/master/db/db_bench_test.go) by zchee.
