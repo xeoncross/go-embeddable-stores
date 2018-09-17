@@ -17,7 +17,10 @@ These benchmarks and tests are off for a variety of reasons including differing 
 
 ### boltdb - https://github.com/boltdb/bolt
 
-Solid, well-tested, development is locked. Each transaction has a consistent view of the data as it existed when the transaction started. Slowest of the bunch. Has [Storm ORM](https://github.com/asdine/storm). Largest file size. Slowest (due to consistent-data views).
+Solid, well-tested, development is locked. Each transaction has a consistent view of the data as it existed when the transaction started. Slowest of the bunch. Largest file size. Slowest (due to consistent-data views).
+
+- [Blast](https://github.com/mosuka/blast) - full text search and indexing server cluster via [Raft](https://github.com/hashicorp/raft)
+- [Storm](https://github.com/asdine/storm) - ORM-ish layer for database access
 
 ### bbolt - https://github.com/etcd-io/bbolt
 
