@@ -57,6 +57,12 @@ Not tested.
 
 Tiedot is a document store, it really can't be compared to these other databases correctly. Included only for loose reference. Super-fast write speeds. Huge storage requirements.
 
+# Non-Go Embeddable Databases (Cgo)
+
+- RocksDB
+- LMDB
+- hyperleveldb
+
 ### SQLite
 
 Not tested. Multiple versions exist, most wrap the C code.
@@ -70,12 +76,6 @@ no `database/sql` driver
 
 
 Comparison between [bvinc/go-sqlite-lite & crawshaw/sqlite](https://www.reddit.com/r/golang/comments/96yd0t/gosqlitelite_a_new_light_weight_sqlite_package/e44eoym/).
-
-# Non-Go Embeddable Databases (Cgo)
-
-- RocksDB
-- LMDB
-- hyperleveldb
 
 
 # Sample Results
