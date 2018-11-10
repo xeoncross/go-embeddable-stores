@@ -39,7 +39,10 @@ Well tested. Smallest storage size.
 
 ### badgerdb - https://github.com/dgraph-io/badger
 
-Fastest engine for random lookups and inserts. Graph engine [dgraph](https://github.com/dgraph-io/dgraph) built upon it. [More...](https://blog.dgraph.io/post/badger/)
+Fastest engine for random lookups and inserts.
+
+- Graph engine [dgraph](https://github.com/dgraph-io/dgraph) built upon it. [More...](https://blog.dgraph.io/post/badger/)
+- [Cete document store](https://github.com/1lann/cete)
 
 ### keydb - https://github.com/robaho/keydb
 
@@ -115,14 +118,26 @@ Comparison between [bvinc/go-sqlite-lite & crawshaw/sqlite](https://www.reddit.c
 - https://www.voltdb.com/blog/2015/04/01/foundationdbs-lesson-fast-key-value-store-not-enough/
 - https://petewarden.com/2010/10/01/how-i-ended-up-using-s3-as-my-database/
 - https://hackernoon.com/what-i-learnt-from-building-3-high-traffic-web-applications-on-an-embedded-key-value-store-68d47249774f
+- https://www.cockroachlabs.com/docs/stable/architecture/storage-layer.html
+- https://github.com/kval-access-language/kval-language-specification
 
 ## Indexing data
 
-- https://github.com/blevesearch/bleve
+- https://github.com/blevesearch/bleve ([Video](https://www.youtube.com/watch?v=OynPw4aOlV0))
 - http://roaringbitmap.org/
 - https://www.pilosa.com/docs/latest/data-model/
 - https://github.com/Xeoncross/keyset
 
+## Encoding/Decoding
+
+If inserting complex data types (structs, maps, slices...) into a key/value store you must encode/decode them first.
+
+1. `protobuf` provides performance, correctness and interoperability. Requires you to generate protobuf files.
+2. `gob` is the next fastest format with the smallest data size. More for streaming protocols where you don't want to have to have a pre-shared schema. Poor interoperability.
+2. `json` the default. Reasonable performance. Highest interoperability.
+3. `xml` is to be avoided.
+
+- https://github.com/alecthomas/go_serialization_benchmarks
 
 
 # Other benchmarks
