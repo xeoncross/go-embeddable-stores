@@ -146,6 +146,7 @@ If inserting complex data types (structs, maps, slices...) into a key/value stor
 
 # Other benchmarks
 
+- [badgerdb, goleveldb, boltdb, bboltdb, buntdb, rocksdb, cznic/kv, map](https://github.com/smallnest/kvbench)
 - [badgerdb, goleveldb, boltdb benchmark](https://github.com/zchee/go-benchmarks/blob/master/db/db_bench_test.go) by zchee.
 - [badgerdb, goleveldb, boltdb, rocksdb benchmark](https://github.com/dgraph-io/badger-bench) by dgraph. (High-Quality)
 - [goleveldb, boltdb, pogreb write/put benchmark](https://gist.github.com/mattn/3990033f7bc8a57cd5b86edefb254332) by mattn.
